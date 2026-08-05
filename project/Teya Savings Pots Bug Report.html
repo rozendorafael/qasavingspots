@@ -340,6 +340,29 @@
     box-shadow: 0 18px 44px rgba(12, 14, 18, 0.16), 0 2px 8px rgba(12, 14, 18, 0.06);
     display: block;
   }
+  .video-wrap {
+    position: relative;
+    height: 100%;
+    max-height: 840px;
+    display: inline-block;
+  }
+  .video-wrap .video-card { height: 100%; }
+  .play-badge {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 96px; height: 96px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: rgba(15, 19, 24, 0.62);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 3;
+    backdrop-filter: blur(4px);
+  }
+  .play-badge svg { width: 56px; height: 56px; margin-left: 6px; }
+  .video-wrap.playing .play-badge { opacity: 0; }
   .shot-tag {
     position: absolute; top: 16px; left: 16px; z-index: 3;
     font-family: var(--font-mono);
@@ -565,7 +588,7 @@
       <div class="cover-meta" data-om-id="41d47ea5:19">
         <div class="meta-item" data-om-id="41d47ea5:20">
           <div class="meta-label" data-om-id="41d47ea5:21">Build tested</div>
-          <div class="meta-value mono" data-om-id="41d47ea5:22">TBD</div>
+          <div class="meta-value mono" data-om-id="41d47ea5:22">3.5.0</div>
         </div>
         <div class="meta-item" data-om-id="41d47ea5:23">
           <div class="meta-label" data-om-id="41d47ea5:24">Reported by</div>
@@ -573,7 +596,7 @@
         </div>
         <div class="meta-item" data-om-id="41d47ea5:26">
           <div class="meta-label" data-om-id="41d47ea5:27">Date</div>
-          <div class="meta-value" data-om-id="41d47ea5:28">TBD</div>
+          <div class="meta-value" data-om-id="41d47ea5:28">August 5, 2026</div>
         </div>
       </div>
     </div>
@@ -584,7 +607,7 @@
     <div class="slide" data-om-id="41d47ea5:30">
       <div class="slide-head" data-om-id="41d47ea5:31">
         <h2 data-om-id="41d47ea5:32">Summary</h2>
-        <div class="pager" data-om-id="41d47ea5:33">0 issues · TBD</div>
+        <div class="pager" data-om-id="41d47ea5:33">18 issues · 3.5.0</div>
       </div>
 
       <div class="sum-grid" data-om-id="41d47ea5:34">
@@ -594,17 +617,17 @@
           <div class="sum-sub" data-om-id="41d47ea5:38">Stops a core flow</div>
         </div>
         <div class="sum-card c-major anim" data-om-id="41d47ea5:39">
-          <div class="sum-num" data-om-id="41d47ea5:40">0</div>
+          <div class="sum-num" data-om-id="41d47ea5:40">2</div>
           <div class="sum-label" data-om-id="41d47ea5:41">Major</div>
           <div class="sum-sub" data-om-id="41d47ea5:42">Serious</div>
         </div>
         <div class="sum-card c-minor anim" data-om-id="41d47ea5:43">
-          <div class="sum-num" data-om-id="41d47ea5:44">0</div>
+          <div class="sum-num" data-om-id="41d47ea5:44">8</div>
           <div class="sum-label" data-om-id="41d47ea5:45">Minor</div>
           <div class="sum-sub" data-om-id="41d47ea5:46">Limited impact</div>
         </div>
         <div class="sum-card c-trivial anim" data-om-id="41d47ea5:47">
-          <div class="sum-num" data-om-id="41d47ea5:48">0</div>
+          <div class="sum-num" data-om-id="41d47ea5:48">8</div>
           <div class="sum-label" data-om-id="41d47ea5:49">Trivial</div>
           <div class="sum-sub" data-om-id="41d47ea5:50">Cosmetic only</div>
         </div>
@@ -612,10 +635,10 @@
 
       <div class="sum-footer" data-om-id="41d47ea5:51">
         <div class="sum-total" data-om-id="41d47ea5:52">
-          <span class="n" data-om-id="41d47ea5:53">0</span>
+          <span class="n" data-om-id="41d47ea5:53">18</span>
           <span class="t" data-om-id="41d47ea5:54">issues found</span>
         </div>
-        <div class="dist-bar" aria-hidden="true" data-om-id="41d47ea5:55" style="background:var(--hairline)"></div>
+        <div class="dist-bar" aria-hidden="true" data-om-id="41d47ea5:55" style="background:linear-gradient(90deg, var(--sev-major) 0%, var(--sev-major) 11.11%, var(--sev-minor) 11.11%, var(--sev-minor) 55.56%, var(--sev-trivial) 55.56%, var(--sev-trivial) 100%)"></div>
       </div>
     </div>
   </section>
@@ -632,29 +655,719 @@
         <div class="scale-row anim" data-om-id="41d47ea5:64">
           <div class="scale-name" data-om-id="41d47ea5:65"><span class="sev sev-blocker" data-om-id="41d47ea5:66"><span class="dot" data-om-id="41d47ea5:67"></span>Blocker</span></div>
           <div class="scale-def" data-om-id="41d47ea5:68">Core function unusable, data loss, or crash.</div>
-          <div class="scale-resp" data-om-id="41d47ea5:69"><b data-om-id="41d47ea5:70">Fix before release.</b> Hotfix candidate.</div>
         </div>
         <div class="scale-row anim" data-om-id="41d47ea5:71">
           <div class="scale-name" data-om-id="41d47ea5:72"><span class="sev sev-major" data-om-id="41d47ea5:73"><span class="dot" data-om-id="41d47ea5:74"></span>Major</span></div>
           <div class="scale-def" data-om-id="41d47ea5:75">Important feature broken or behaving incorrectly.</div>
-          <div class="scale-resp" data-om-id="41d47ea5:76"><b data-om-id="41d47ea5:77">Fix this cycle.</b> High priority.</div>
         </div>
         <div class="scale-row anim" data-om-id="41d47ea5:78">
           <div class="scale-name" data-om-id="41d47ea5:79"><span class="sev sev-minor" data-om-id="41d47ea5:80"><span class="dot" data-om-id="41d47ea5:81"></span>Minor</span></div>
           <div class="scale-def" data-om-id="41d47ea5:82">Noticeable issue with limited impact on the user's task.</div>
-          <div class="scale-resp" data-om-id="41d47ea5:83"><b data-om-id="41d47ea5:84">Schedule soon.</b> Backlog.</div>
         </div>
         <div class="scale-row anim" data-om-id="41d47ea5:85">
           <div class="scale-name" data-om-id="41d47ea5:86"><span class="sev sev-trivial" data-om-id="41d47ea5:87"><span class="dot" data-om-id="41d47ea5:88"></span>Trivial</span></div>
           <div class="scale-def" data-om-id="41d47ea5:89">Cosmetic or copy issue. No functional impact.</div>
-          <div class="scale-resp" data-om-id="41d47ea5:90"><b data-om-id="41d47ea5:91">Nice to have.</b> Polish.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 4 · CLOSING -->
-  <section data-label="Questions" data-screen-label="04 Questions" data-om-id="41d47ea5:317" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="3" data-deck-last-visible="">
+  <!-- 4 · BUG 01 -->
+  <section data-label="Bug 01" data-screen-label="04 Bug 01" data-deck-slide="3">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Savings Pots amounts remain visible when hiding sensitive values</h2>
+        <div class="pager">Bug 01 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <video class="video-card" src="assets/bug01-savings-visibility.mp4" controls="" muted="" loop="" playsinline="" preload="metadata"></video>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Eye toggle does not mask Savings Pots values on Home</h3>
+          <div class="bug-badges">
+            <span class="sev sev-minor"><span class="dot"></span>Minor</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">When the user activates the eye toggle to hide sensitive amounts on the Home screen, the total balance is masked correctly, but the values inside each Savings Pot card remain visible. The privacy toggle should also mask them.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Savings Pots amounts are masked together with the main balance.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Savings Pots amounts stay visible while the balance is hidden.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · BUG 02 -->
+  <section data-label="Bug 02" data-screen-label="05 Bug 02" data-deck-slide="4">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Missing entry point to create a new Savings Pot in the More menu</h2>
+        <div class="pager">Bug 02 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <video class="video-card" src="assets/bug02-savings-entrypoint.mp4" controls="" muted="" loop="" playsinline="" preload="metadata"></video>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">"Create new Savings Pot" is missing from the More menu list</h3>
+          <div class="bug-badges">
+            <span class="sev sev-minor"><span class="dot"></span>Minor</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">When the user taps the "More" button, the action list opens without an entry to create a new Savings Pot. This entry point is expected so the user can start the creation flow directly from the menu.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">"Create new Savings Pot" appears as an item in the More menu list.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">The entry point is missing from the list.</div>
+              </div>
+            </div>
+            <div>
+              <div class="field-label">Figma reference</div>
+              <a class="ref-link" href="https://www.figma.com/design/hEqSN0pSAbWctlfspisu42/BA-Mobile?node-id=28593-31447&amp;t=hyf05u4lA9WyIdir-1" target="_blank" rel="noopener"><span class="figma"></span>More menu — BA Mobile<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · BUG 03 -->
+  <section data-label="Bug 03" data-screen-label="06 Bug 03" data-deck-slide="5">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Only "3% AER" should be highlighted in the intro headline</h2>
+        <div class="pager">Bug 03 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug03-shot" fit="cover" src="assets/bug03-savings-highlight.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Word "variable" is being highlighted along with "3% AER"</h3>
+          <div class="bug-badges">
+            <span class="sev sev-trivial"><span class="dot"></span>Trivial</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">On the Savings Pots intro screen, only the rate "3% AER" should be emphasized in the accent color. Currently the word "variable" is also styled with the accent, which changes the intended visual hierarchy of the headline.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Only "3% AER" is highlighted; "variable" stays in the regular ink color.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">"3% AER variable" is highlighted as a single accented phrase.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · BUG 04 -->
+  <section data-label="Bug 04" data-screen-label="07 Bug 04" data-deck-slide="6">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Back button on the name/icon step closes the whole flow</h2>
+        <div class="pager">Bug 04 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <video class="video-card" src="assets/bug04-back-navigation.mp4" controls="" muted="" loop="" playsinline="" preload="metadata"></video>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Back should return to the previous step, not exit the flow</h3>
+          <div class="bug-badges">
+            <span class="sev sev-minor"><span class="dot"></span>Minor</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">On the name/icon selection screen of the Savings Pot creation flow, tapping the back button in the top bar closes the whole flow and returns the user to Home, instead of navigating back one step to the marketing/intro screen.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Back returns to the previous screen (Savings Pots intro).</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">The entire flow is dismissed and the user is sent back to Home.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · BUG 05 -->
+  <section data-label="Bug 05" data-screen-label="08 Bug 05" data-deck-slide="7">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Loading glitch on the name/icon screen</h2>
+        <div class="pager">Bug 05 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <video class="video-card" src="assets/bug05-loading-glitch.mp4" controls="" muted="" loop="" playsinline="" preload="metadata"></video>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Content shifts down and snaps back on load</h3>
+          <div class="bug-badges">
+            <span class="sev sev-minor"><span class="dot"></span>Minor</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">When the name/icon selection screen of the Savings Pot creation flow first appears, a top padding briefly pushes the content down and then disappears, causing a visible layout jump.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Screen renders in its final layout without any shift.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Content is pushed down by an extra top padding, then snaps back into place.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · BUG 06 -->
+  <section data-label="Bug 06" data-screen-label="09 Bug 06" data-deck-slide="8">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>FAQ Bottom Sheet uses the wrong background token</h2>
+        <div class="pager">Bug 06 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug06-shot" fit="cover" src="assets/bug06-faq-bg-token.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Bottom Sheet background should be "bg-subtle", not "bg-default"</h3>
+          <div class="bug-badges">
+            <span class="sev sev-trivial"><span class="dot"></span>Trivial</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">When opening a question in the FAQ section, the Bottom Sheet component uses the "bg-default" token as its background. Per the design system, this surface should use the "bg-subtle" token so it reads as a secondary layer over the base screen.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Bottom Sheet background uses the "bg-subtle" token.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Bottom Sheet background uses the "bg-default" token.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · BUG 07 -->
+  <section data-label="Bug 07" data-screen-label="10 Bug 07" data-deck-slide="9">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Documents subtitle should truncate to a single line</h2>
+        <div class="pager">Bug 07 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug07-shot" fit="cover" src="assets/bug07-documents-truncate.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Wrap the Documents list to one line with an ellipsis</h3>
+          <div class="bug-badges">
+            <span class="sev sev-trivial"><span class="dot"></span>Trivial</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">On the Review and confirm screen, the Documents row subtitle listing "ClearBank's, Teya's T&Cs and Summary box" wraps to a second line. The subtitle should be limited to a single line and collapse with an ellipsis (…) when it overflows, keeping the row height consistent.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Subtitle is truncated to one line with an ellipsis when it does not fit.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Subtitle wraps to a second line, making the row taller.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · BUG 08 -->
+  <section data-label="Bug 08" data-screen-label="11 Bug 08" data-deck-slide="10">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Incorrect copy on the FSCS acknowledgement checkbox</h2>
+        <div class="pager">Bug 08 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug08-shot" fit="cover" src="assets/bug08-fscs-copy.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">FSCS checkbox label does not match the intended copy</h3>
+          <div class="bug-badges">
+            <span class="sev sev-trivial"><span class="dot"></span>Trivial</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">On the Review and confirm screen, the second consent checkbox related to FSCS shows an incorrect label. The current copy does not match the expected wording defined for this consent.</p>
+          <div class="fields">
+            <div>
+              <div class="field-label">Figma reference</div>
+              <a class="ref-link" href="https://www.figma.com/design/hEqSN0pSAbWctlfspisu42/BA-Mobile?node-id=25722-86257&amp;t=hyf05u4lA9WyIdir-1" target="_blank" rel="noopener"><span class="figma"></span>Review and confirm — BA Mobile<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · BUG 09 -->
+  <section data-label="Bug 09" data-screen-label="12 Bug 09" data-deck-slide="11">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Two loading states appear before the PIN screen</h2>
+        <div class="pager">Bug 09 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <video class="video-card" src="assets/bug09-confirm-loading.mp4" controls="" muted="" loop="" playsinline="" preload="metadata"></video>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Confirm → PIN transition shows two consecutive loaders</h3>
+          <div class="bug-badges">
+            <span class="sev sev-major"><span class="dot"></span>Major</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">When the user taps "Confirm" to create the Savings Pot, the button first shows a loading state, and immediately after the whole screen shows a second loading state before the PIN input finally appears. It is worth reviewing which requests run at this step so the final transition feels like a single, fluid moment.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">A single, brief loading state between Confirm and the PIN screen.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Button loader, then a full-screen loader, then the PIN screen — two loading moments back to back.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 · BUG 10 -->
+  <section data-label="Bug 10" data-screen-label="13 Bug 10" data-deck-slide="12">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>PIN confirmation is requested twice when finishing Savings Pot creation</h2>
+        <div class="pager">Bug 10 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <video class="video-card" src="assets/bug10-double-pin.mp4" controls="" muted="" loop="" playsinline="" preload="metadata"></video>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">User is prompted to enter the PIN twice in the final step</h3>
+          <div class="bug-badges">
+            <span class="sev sev-major"><span class="dot"></span>Major</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">At the end of the Savings Pot creation flow, the user is asked to enter the PIN, and immediately after a successful entry the PIN screen appears again asking for the same confirmation. The second prompt should not be shown.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">PIN is requested once and the Savings Pot is created.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">PIN is requested twice in a row before the flow completes.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 · BUG 11 -->
+  <section data-label="Bug 11" data-screen-label="14 Bug 11" data-deck-slide="13">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Success bottom sheet is missing the "Skip for now" button</h2>
+        <div class="pager">Bug 11 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug11-shot" fit="cover" src="assets/bug11-success-skip.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">"Skip for now" is missing next to the "Add money" CTA</h3>
+          <div class="bug-badges">
+            <span class="sev sev-minor"><span class="dot"></span>Minor</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">On the "Your Savings Pot is ready" success bottom sheet, only the primary "Add money" button is shown. The secondary "Skip for now" action is missing, so the user has no explicit option to dismiss the step without adding money.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">"Add money" primary CTA plus a "Skip for now" secondary action.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Only the "Add money" CTA is shown.</div>
+              </div>
+            </div>
+            <div>
+              <div class="field-label">Figma reference</div>
+              <a class="ref-link" href="https://www.figma.com/design/hEqSN0pSAbWctlfspisu42/BA-Mobile?node-id=24042-325759&amp;t=hyf05u4lA9WyIdir-1" target="_blank" rel="noopener"><span class="figma"></span>Savings Pot ready — BA Mobile<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 · BUG 12 -->
+  <section data-label="Bug 12" data-screen-label="15 Bug 12" data-deck-slide="14">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>"Transfer out" button should read "Withdraw"</h2>
+        <div class="pager">Bug 12 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug12-shot" fit="cover" src="assets/bug12-transfer-out-copy.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Secondary CTA on the Savings Pot screen uses the wrong copy</h3>
+          <div class="bug-badges">
+            <span class="sev sev-trivial"><span class="dot"></span>Trivial</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">On the Savings Pot screen, the secondary action next to "Add money" is labelled "Transfer out". Per the design, this button should be labelled "Withdraw".</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Button label: "Withdraw".</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Button label: "Transfer out".</div>
+              </div>
+            </div>
+            <div>
+              <div class="field-label">Figma reference</div>
+              <a class="ref-link" href="https://www.figma.com/design/hEqSN0pSAbWctlfspisu42/BA-Mobile?node-id=24042-325415&amp;t=hyf05u4lA9WyIdir-1" target="_blank" rel="noopener"><span class="figma"></span>Savings Pot screen — BA Mobile<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 · BUG 13 -->
+  <section data-label="Bug 13" data-screen-label="16 Bug 13" data-deck-slide="15">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Withdraw button should be disabled when the balance is zero</h2>
+        <div class="pager">Bug 13 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug13-shot" fit="cover" src="assets/bug12-transfer-out-copy.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Withdraw action stays enabled with an empty Savings Pot</h3>
+          <div class="bug-badges">
+            <span class="sev sev-minor"><span class="dot"></span>Minor</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">On the Savings Pot screen, the Withdraw button (currently labelled "Transfer out") remains enabled even when the balance is £0.00. With no funds available there is nothing to withdraw, so the button should be disabled to prevent the user from starting an action that cannot succeed.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Withdraw button is disabled while the Savings Pot balance is £0.00.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Withdraw button stays enabled and tappable at zero balance.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 · BUG 14 -->
+  <section data-label="Bug 14" data-screen-label="17 Bug 14" data-deck-slide="16">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Confirmation toast is missing after editing the Savings Pot icon</h2>
+        <div class="pager">Bug 14 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <video class="video-card" src="assets/bug14-missing-toast.mp4" controls="" muted="" loop="" playsinline="" preload="metadata"></video>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">No feedback is shown after saving a new icon</h3>
+          <div class="bug-badges">
+            <span class="sev sev-minor"><span class="dot"></span>Minor</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">After changing the Savings Pot icon and saving, no confirmation toast is displayed. The user has no explicit feedback that the change was applied successfully, even though the design specifies a toast for this action.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">A confirmation toast appears after the icon is saved.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">No toast is shown; the change happens silently.</div>
+              </div>
+            </div>
+            <div>
+              <div class="field-label">Figma reference</div>
+              <a class="ref-link" href="https://www.figma.com/design/hEqSN0pSAbWctlfspisu42/BA-Mobile?node-id=27138-90357&amp;t=hyf05u4lA9WyIdir-1" target="_blank" rel="noopener"><span class="figma"></span>Edit icon toast — BA Mobile<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 · BUG 15 -->
+  <section data-label="Bug 15" data-screen-label="18 Bug 15" data-deck-slide="17">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Incorrect copy on the Add Money confirmation toast</h2>
+        <div class="pager">Bug 15 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug15-shot" fit="cover" src="assets/bug15-add-money-toast.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Toast text after adding money does not match the design</h3>
+          <div class="bug-badges">
+            <span class="sev sev-trivial"><span class="dot"></span>Trivial</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">After adding money to the Savings Pot, the confirmation toast currently reads "£10.00 added to your pot". This copy does not match the wording defined in the design for this confirmation.</p>
+          <div class="fields">
+            <div>
+              <div class="field-label">Figma reference</div>
+              <a class="ref-link" href="https://www.figma.com/design/hEqSN0pSAbWctlfspisu42/BA-Mobile?node-id=24474-183123&amp;t=hyf05u4lA9WyIdir-1" target="_blank" rel="noopener"><span class="figma"></span>Add money toast — BA Mobile<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19 · BUG 16 -->
+  <section data-label="Bug 16" data-screen-label="19 Bug 16" data-deck-slide="18">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>"New" button stays enabled after reaching the 10 Savings Pots limit</h2>
+        <div class="pager">Bug 16 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <video class="video-card" src="assets/bug16-max-limit.mp4" controls="" muted="" loop="" playsinline="" preload="metadata"></video>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Users can create more than 10 Savings Pots</h3>
+          <div class="bug-badges">
+            <span class="sev sev-minor"><span class="dot"></span>Minor</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">The Savings Pots list allows a user to keep creating new pots even after the maximum of 10 has been reached. Once the limit is hit, the "New" button should be disabled to prevent additional creations.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">"New" button is disabled once the user has 10 Savings Pots.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">"New" button stays enabled and lets the user create more than 10 pots.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20 · BUG 17 -->
+  <section data-label="Bug 17" data-screen-label="20 Bug 17" data-deck-slide="19">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Transaction list items should not display a chevron</h2>
+        <div class="pager">Bug 17 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug17-shot" fit="cover" src="assets/bug18-padding-transaction.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Extra chevron shown on each transaction row in Interest overview</h3>
+          <div class="bug-badges">
+            <span class="sev sev-trivial"><span class="dot"></span>Trivial</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">On the Interest overview screen, each item of the transaction list renders a trailing chevron. Per the design, this chevron should not be shown on these rows.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Transaction rows show the amount only, without a trailing chevron.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Each transaction row shows a chevron after the amount.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 21 · BUG 18 -->
+  <section data-label="Bug 18" data-screen-label="21 Bug 18" data-deck-slide="20">
+    <div class="slide">
+      <div class="slide-head">
+        <h2>Incorrect left padding on the transaction list</h2>
+        <div class="pager">Bug 18 / 18</div>
+      </div>
+      <div class="bug-body">
+        <div class="bug-media">
+          <div class="shot-stage">
+            <div class="shot-card">
+              <image-slot id="bug18-shot" fit="cover" src="assets/bug17-chevron-transaction.jpeg" placeholder="Drop the bug screenshot" data-editable="" data-filled=""></image-slot>
+            </div>
+          </div>
+        </div>
+        <div class="bug-detail">
+          <h3 class="bug-title">Transaction row is flush to the left edge of the screen</h3>
+          <div class="bug-badges">
+            <span class="sev sev-trivial"><span class="dot"></span>Trivial</span>
+            <span class="status status-open"><span class="dot"></span>Open</span>
+          </div>
+          <p class="bug-desc">On the Interest overview screen, the transaction row is flush against the left edge of the screen. The left padding is incorrect.</p>
+          <div class="fields">
+            <div class="ea">
+              <div class="ea-cell">
+                <div class="field-label">Expected</div>
+                <div class="v good">Transaction row uses the same left padding as the other sections on the screen.</div>
+              </div>
+              <div class="ea-cell">
+                <div class="field-label">Actual</div>
+                <div class="v bad">Transaction row is aligned to the very left edge, with no padding.</div>
+              </div>
+            </div>
+            <div>
+              <div class="field-label">Figma reference</div>
+              <a class="ref-link" href="https://www.figma.com/design/hEqSN0pSAbWctlfspisu42/BA-Mobile?node-id=25189-11213&amp;t=hyf05u4lA9WyIdir-1" target="_blank" rel="noopener"><span class="figma"></span>Interest overview — BA Mobile<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 22 · CLOSING -->
+  <section data-label="Questions" data-screen-label="22 Questions" data-om-id="41d47ea5:317" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="21" data-deck-last-visible="">
     <div class="slide closing" data-om-id="41d47ea5:318">
       <div class="cover-eyebrow anim" data-om-id="41d47ea5:319">Thank you</div>
       <h1 class="anim" data-om-id="41d47ea5:320">Questions?</h1>
@@ -666,11 +1379,11 @@
         </div>
         <div class="meta-item" data-om-id="41d47ea5:326">
           <div class="meta-label" data-om-id="41d47ea5:327">Build tested</div>
-          <div class="meta-value mono" data-om-id="41d47ea5:328">TBD</div>
+          <div class="meta-value mono" data-om-id="41d47ea5:328">3.5.0</div>
         </div>
         <div class="meta-item" data-om-id="41d47ea5:329">
           <div class="meta-label" data-om-id="41d47ea5:330">Tracker</div>
-          <div class="meta-value mono" data-om-id="41d47ea5:331">—</div>
+          <div class="meta-value mono" data-om-id="41d47ea5:331">Bugs 01–18</div>
         </div>
       </div>
     </div>
@@ -682,6 +1395,26 @@
 
 <script src="deck-stage.js"></script>
 <script src="image-slot.js"></script>
+
+<script>
+  // Wrap each video in a container with a centered play badge (visual hint that this is a video).
+  // Badge fades out once the video is playing and returns when paused/ended.
+  document.querySelectorAll('video.video-card').forEach(function (v) {
+    if (v.parentElement && v.parentElement.classList.contains('video-wrap')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'video-wrap';
+    v.parentNode.insertBefore(wrap, v);
+    wrap.appendChild(v);
+    var badge = document.createElement('div');
+    badge.className = 'play-badge';
+    badge.setAttribute('aria-hidden', 'true');
+    badge.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
+    wrap.appendChild(badge);
+    v.addEventListener('play', function () { wrap.classList.add('playing'); });
+    v.addEventListener('pause', function () { wrap.classList.remove('playing'); });
+    v.addEventListener('ended', function () { wrap.classList.remove('playing'); });
+  });
+</script>
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
