@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Teya — Savings Pots · QA Bug Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Type scale (1920x1080) */
+    --type-display: 88px;
+    --type-title: 56px;
+    --type-subtitle: 40px;
+    --type-body: 30px;
+    --type-small: 26px;
+    --type-mono: 24px;
+
+    /* Spacing */
+    --pad-x: 110px;
+    --pad-top: 92px;
+    --pad-bottom: 84px;
+    --gap-title: 40px;
+    --gap-item: 26px;
+
+    /* Palette — light, corporate clean */
+    --bg: #F6F5F3;
+    --surface: #FFFFFF;
+    --ink: #15191F;
+    --muted: #5A6472;
+    --faint: #8A92A0;
+    --hairline: #E4E7EC;
+    --hairline-strong: #D3D8E0;
+
+    /* Accent (tweakable) */
+    --accent: #E1E51A;
+    --accent-soft: #F4F5C9;
+    --accent-ink: #6E7200;
+
+    /* Severity */
+    --sev-blocker: #DC2626;
+    --sev-blocker-soft: #FCEAEA;
+    --sev-major: #E0820A;
+    --sev-major-soft: #FBF0DD;
+    --sev-minor: #2563EB;
+    --sev-minor-soft: #E7EEFD;
+    --sev-trivial: #6B7280;
+    --sev-trivial-soft: #EEF0F3;
+
+    --font-display: "Figtree", sans-serif;
+    --font-body: "Figtree", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  deck-stage:not(:defined) { visibility: hidden; }
+  deck-stage { background: #0c0e12; }
+
+  section {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    overflow: hidden;
+  }
+
+  .slide {
+    width: 100%; height: 100%;
+    padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- shared bits ---------- */
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: var(--type-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    font-weight: 500;
+  }
+  .slide-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 40px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 34px;
+  }
+  .slide-head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--type-title);
+    margin: 0;
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+  }
+  .slide-head .pager {
+    font-family: var(--font-mono);
+    font-size: var(--type-mono);
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  /* severity pill */
+  .sev {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px 10px 16px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: var(--type-mono);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .sev .dot { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+  .sev-blocker { background: var(--sev-blocker-soft); color: var(--sev-blocker); }
+  .sev-blocker .dot { background: var(--sev-blocker); }
+  .sev-major { background: var(--sev-major-soft); color: var(--sev-major); }
+  .sev-major .dot { background: var(--sev-major); }
+  .sev-minor { background: var(--sev-minor-soft); color: var(--sev-minor); }
+  .sev-minor .dot { background: var(--sev-minor); }
+  .sev-trivial { background: var(--sev-trivial-soft); color: var(--sev-trivial); }
+  .sev-trivial .dot { background: var(--sev-trivial); }
+
+  /* ---------- COVER ---------- */
+  .cover {
+    justify-content: space-between;
+    padding-top: 120px;
+    padding-bottom: 100px;
+    position: relative;
+    background: #FFFFFF;
+  }
+  .cover-art {
+    position: absolute;
+    right: 150px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 380px;
+    height: auto;
+    pointer-events: none;
+  }
+  .cover-top { display: flex; align-items: center; gap: 22px; }
+  .brand-mark {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: var(--accent);
+    display: grid; place-items: center;
+    color: var(--ink); font-family: var(--font-display);
+    font-weight: 700; font-size: 30px;
+  }
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 600; font-size: 32px; letter-spacing: -0.01em;
+  }
+  .cover-main { display: flex; flex-direction: column; justify-content: center; gap: 30px; flex: 1; }
+  .cover-eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--type-mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+  .cover h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--type-display);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 0;
+    max-width: 18ch;
+  }
+  .cover h1 .thin { color: var(--muted); font-weight: 500; }
+  .cover-meta {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    gap: 80px;
+    padding-top: 36px;
+    border-top: 1px solid var(--hairline-strong);
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 10px; }
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: var(--type-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .meta-value {
+    font-size: var(--type-subtitle);
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .meta-value.mono { font-family: var(--font-mono); font-size: 34px; }
+
+  /* ---------- SUMMARY ---------- */
+  .sum-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    margin-bottom: 52px;
+  }
+  .sum-card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 18px;
+    padding: 36px 36px 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .sum-card::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  }
+  .sum-card.c-blocker::before { background: var(--sev-blocker); }
+  .sum-card.c-major::before { background: var(--sev-major); }
+  .sum-card.c-minor::before { background: var(--sev-minor); }
+  .sum-card.c-trivial::before { background: var(--sev-trivial); }
+  .sum-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+  }
+  .sum-card.c-blocker .sum-num { color: var(--sev-blocker); }
+  .sum-card.c-major .sum-num { color: var(--sev-major); }
+  .sum-card.c-minor .sum-num { color: var(--sev-minor); }
+  .sum-card.c-trivial .sum-num { color: var(--sev-trivial); }
+  .sum-label {
+    font-family: var(--font-mono);
+    font-size: var(--type-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .sum-sub { font-size: var(--type-small); color: var(--faint); }
+
+  .sum-footer {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    margin-top: auto;
+  }
+  .sum-total { display: flex; align-items: baseline; gap: 18px; }
+  .sum-total .n {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 64px; letter-spacing: -0.02em;
+  }
+  .sum-total .t {
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  .dist-bar {
+    flex: 1;
+    height: 28px;
+    border-radius: 999px;
+    overflow: hidden;
+    display: flex;
+    border: 1px solid var(--hairline);
+  }
+  .dist-bar span { display: block; height: 100%; }
+
+  /* ---------- SEVERITY SCALE ---------- */
+  .scale-list { display: flex; flex-direction: column; gap: 22px; }
+  .scale-row {
+    display: grid;
+    grid-template-columns: 280px 1fr 360px;
+    align-items: center;
+    gap: 44px;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    padding: 30px 38px;
+  }
+  .scale-name { display: flex; align-items: center; }
+  .scale-def { font-size: var(--type-body); color: var(--ink); line-height: 1.3; }
+  .scale-resp {
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .scale-resp b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- BUG SLIDES ---------- */
+  .bug-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 53% 1fr;
+    gap: 56px;
+    min-height: 0;
+  }
+  .bug-media { display: flex; flex-direction: column; gap: 22px; min-height: 0; }
+  .shot-wrap {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--hairline-strong);
+    background: var(--surface);
+  }
+  .shot-wrap image-slot { width: 100%; height: 100%; }
+
+  /* Screenshot card (filled bugs) */
+  .shot-stage {
+    flex: 1; min-height: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .shot-card {
+    height: 100%;
+    max-height: 840px;
+    aspect-ratio: 1179 / 2556;
+    border-radius: 32px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 18px 44px rgba(12, 14, 18, 0.16), 0 2px 8px rgba(12, 14, 18, 0.06);
+  }
+  .shot-card image-slot { width: 100%; height: 100%; }
+
+  /* Video card (video bugs) */
+  .video-card {
+    height: 100%;
+    max-height: 840px;
+    width: auto;
+    max-width: 100%;
+    border-radius: 32px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 18px 44px rgba(12, 14, 18, 0.16), 0 2px 8px rgba(12, 14, 18, 0.06);
+    display: block;
+  }
+  .shot-tag {
+    position: absolute; top: 16px; left: 16px; z-index: 3;
+    font-family: var(--font-mono);
+    font-size: 24px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: rgba(255,255,255,0.92);
+    border: 1px solid var(--hairline);
+    padding: 7px 14px; border-radius: 8px;
+    pointer-events: none;
+  }
+  .clip {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 16px 22px 16px 16px;
+    flex: none;
+  }
+  .clip-thumb {
+    position: relative;
+    width: 196px; height: 110px; flex: none;
+    border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--hairline-strong);
+    background: #0c0e12;
+  }
+  .clip-thumb image-slot { width: 100%; height: 100%; }
+  .play {
+    position: absolute; inset: 0; margin: auto;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    display: grid; place-items: center;
+    pointer-events: none; z-index: 3;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  }
+  .play::after {
+    content: ""; width: 0; height: 0; margin-left: 4px;
+    border-left: 18px solid var(--ink);
+    border-top: 11px solid transparent;
+    border-bottom: 11px solid transparent;
+  }
+  .clip-meta { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .clip-label {
+    font-family: var(--font-mono);
+    font-size: 24px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--faint);
+  }
+  .clip-link {
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    word-break: break-all;
+  }
+  .ref-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+    color: var(--accent-ink);
+    text-decoration: none;
+    padding: 12px 18px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: 12px;
+    background: var(--surface);
+    width: fit-content;
+  }
+  .ref-link .figma {
+    width: 18px; height: 18px; border-radius: 5px; flex: none;
+    background: var(--accent);
+  }
+  .ref-link .arrow { color: var(--faint); }
+
+  .bug-detail { display: flex; flex-direction: column; min-height: 0; }
+  .bug-id {
+    font-family: var(--font-mono);
+    font-size: var(--type-mono);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 18px;
+  }
+  .bug-title {
+    font-family: var(--font-display);
+    font-weight: 600; font-size: 46px; line-height: 1.05;
+    letter-spacing: -0.01em; margin: 0 0 20px;
+  }
+  .bug-badges { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 24px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 8px 16px;
+  }
+  .status {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 18px 8px 14px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: var(--type-mono);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .status .dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+  .status-open { background: #FBE9E2; color: #C2410C; }
+  .status-open .dot { background: #EA580C; }
+  .status-resolved { background: #E6F4EA; color: #137A53; }
+  .status-resolved .dot { background: #1F9D5B; }
+
+  .bug-desc {
+    font-size: var(--type-body);
+    line-height: 1.32;
+    color: var(--ink);
+    margin: 0 0 22px;
+  }
+  .fields {
+    display: flex; flex-direction: column; gap: 18px;
+    padding-top: 22px;
+    border-top: 1px solid var(--hairline);
+  }
+  .field-label {
+    font-family: var(--font-mono);
+    font-size: 24px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 10px;
+  }
+  .steps { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 8px; }
+  .steps li { font-size: var(--type-small); line-height: 1.3; color: var(--ink); }
+  .ea { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .ea .ea-cell { display: flex; flex-direction: column; gap: 10px; }
+  .ea .v { font-size: var(--type-small); line-height: 1.3; }
+  .ea .v.bad { color: var(--sev-blocker); }
+  .ea .v.good { color: #137A53; }
+  .meta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* ---------- PRIORITIES TABLE ---------- */
+  .ptable { width: 100%; border-collapse: collapse; }
+  .ptable th, .ptable td {
+    text-align: left;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--hairline);
+    vertical-align: middle;
+  }
+  .ptable th {
+    font-family: var(--font-mono);
+    font-size: 24px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--faint); font-weight: 500;
+    border-bottom: 2px solid var(--hairline-strong);
+  }
+  .ptable td { font-size: var(--type-small); color: var(--ink); }
+  .ptable td.bug-cell { font-weight: 500; }
+  .ptable .id-cell { font-family: var(--font-mono); color: var(--muted); }
+  .ptable tr:last-child td { border-bottom: none; }
+  .mini-sev {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 24px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .mini-sev .dot { width: 12px; height: 12px; border-radius: 50%; }
+
+  /* ---------- CLOSING ---------- */
+  .closing { justify-content: center; gap: 40px; }
+  .closing h1 {
+    font-family: var(--font-display);
+    font-weight: 600; font-size: var(--type-display);
+    letter-spacing: -0.02em; margin: 0; line-height: 1;
+  }
+  .closing .lead { font-size: var(--type-subtitle); color: var(--muted); max-width: 26ch; line-height: 1.3; }
+  .contact-row {
+    display: grid; grid-template-columns: repeat(3, max-content);
+    gap: 72px; margin-top: 30px;
+    padding-top: 36px; border-top: 1px solid var(--hairline-strong);
+  }
+
+  /* entrance */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-deck-active] .anim {
+      animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    [data-deck-active] .anim:nth-child(2) { animation-delay: 0.06s; }
+    [data-deck-active] .anim:nth-child(3) { animation-delay: 0.12s; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  #tweaks-root { position: fixed; inset: 0; pointer-events: none; z-index: 2147483000; }
+</style>
+</head>
+<body>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" rx="20" fill="#E1E51A"/>
+    <g transform="translate(30 30)" fill="none" stroke="#15191F" stroke-width="5" stroke-linecap="round">
+      <circle cx="16" cy="16" r="14"/>
+      <line x1="26" y1="26" x2="40" y2="40"/>
+      <polyline points="9,16 14,21 23,11" stroke-width="4"/>
+    </g>
+  </svg>
+</template>
+<deck-stage width="1920" height="1080" data-om-id="41d47ea5:8" style="--deck-rail-w: 188px;">
+
+  <!-- 1 · COVER -->
+  <section data-label="Cover" data-screen-label="01 Cover" data-om-id="41d47ea5:9" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="0">
+    <div class="slide cover" data-om-id="41d47ea5:10">
+      <img class="cover-art" src="assets/qa-illustration.png" alt="QA inspector illustration" />
+      <div class="cover-main" data-om-id="41d47ea5:14">
+        <div class="cover-eyebrow anim" data-om-id="41d47ea5:15">QA Bug Report</div>
+        <h1 class="anim" data-om-id="41d47ea5:16">Teya - Savings Pots<br data-om-id="41d47ea5:17"><span class="thin" data-om-id="41d47ea5:18">Quality assurance findings</span></h1>
+      </div>
+
+      <div class="cover-meta" data-om-id="41d47ea5:19">
+        <div class="meta-item" data-om-id="41d47ea5:20">
+          <div class="meta-label" data-om-id="41d47ea5:21">Build tested</div>
+          <div class="meta-value mono" data-om-id="41d47ea5:22">TBD</div>
+        </div>
+        <div class="meta-item" data-om-id="41d47ea5:23">
+          <div class="meta-label" data-om-id="41d47ea5:24">Reported by</div>
+          <div class="meta-value" data-om-id="41d47ea5:25">Rafael Rozendo</div>
+        </div>
+        <div class="meta-item" data-om-id="41d47ea5:26">
+          <div class="meta-label" data-om-id="41d47ea5:27">Date</div>
+          <div class="meta-value" data-om-id="41d47ea5:28">TBD</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · SUMMARY -->
+  <section data-label="Summary" data-screen-label="02 Summary" data-om-id="41d47ea5:29" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="1">
+    <div class="slide" data-om-id="41d47ea5:30">
+      <div class="slide-head" data-om-id="41d47ea5:31">
+        <h2 data-om-id="41d47ea5:32">Summary</h2>
+        <div class="pager" data-om-id="41d47ea5:33">0 issues · TBD</div>
+      </div>
+
+      <div class="sum-grid" data-om-id="41d47ea5:34">
+        <div class="sum-card c-blocker anim" data-om-id="41d47ea5:35">
+          <div class="sum-num" data-om-id="41d47ea5:36">0</div>
+          <div class="sum-label" data-om-id="41d47ea5:37">Blocker</div>
+          <div class="sum-sub" data-om-id="41d47ea5:38">Stops a core flow</div>
+        </div>
+        <div class="sum-card c-major anim" data-om-id="41d47ea5:39">
+          <div class="sum-num" data-om-id="41d47ea5:40">0</div>
+          <div class="sum-label" data-om-id="41d47ea5:41">Major</div>
+          <div class="sum-sub" data-om-id="41d47ea5:42">Serious</div>
+        </div>
+        <div class="sum-card c-minor anim" data-om-id="41d47ea5:43">
+          <div class="sum-num" data-om-id="41d47ea5:44">0</div>
+          <div class="sum-label" data-om-id="41d47ea5:45">Minor</div>
+          <div class="sum-sub" data-om-id="41d47ea5:46">Limited impact</div>
+        </div>
+        <div class="sum-card c-trivial anim" data-om-id="41d47ea5:47">
+          <div class="sum-num" data-om-id="41d47ea5:48">0</div>
+          <div class="sum-label" data-om-id="41d47ea5:49">Trivial</div>
+          <div class="sum-sub" data-om-id="41d47ea5:50">Cosmetic only</div>
+        </div>
+      </div>
+
+      <div class="sum-footer" data-om-id="41d47ea5:51">
+        <div class="sum-total" data-om-id="41d47ea5:52">
+          <span class="n" data-om-id="41d47ea5:53">0</span>
+          <span class="t" data-om-id="41d47ea5:54">issues found</span>
+        </div>
+        <div class="dist-bar" aria-hidden="true" data-om-id="41d47ea5:55" style="background:var(--hairline)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · SEVERITY SCALE -->
+  <section data-label="Severity scale" data-screen-label="03 Severity scale" data-om-id="41d47ea5:58" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="2">
+    <div class="slide" data-om-id="41d47ea5:59">
+      <div class="slide-head" data-om-id="41d47ea5:60">
+        <h2 data-om-id="41d47ea5:61">Severity scale</h2>
+        <div class="pager" data-om-id="41d47ea5:62">How each issue is rated</div>
+      </div>
+
+      <div class="scale-list" data-om-id="41d47ea5:63">
+        <div class="scale-row anim" data-om-id="41d47ea5:64">
+          <div class="scale-name" data-om-id="41d47ea5:65"><span class="sev sev-blocker" data-om-id="41d47ea5:66"><span class="dot" data-om-id="41d47ea5:67"></span>Blocker</span></div>
+          <div class="scale-def" data-om-id="41d47ea5:68">Core function unusable, data loss, or crash.</div>
+          <div class="scale-resp" data-om-id="41d47ea5:69"><b data-om-id="41d47ea5:70">Fix before release.</b> Hotfix candidate.</div>
+        </div>
+        <div class="scale-row anim" data-om-id="41d47ea5:71">
+          <div class="scale-name" data-om-id="41d47ea5:72"><span class="sev sev-major" data-om-id="41d47ea5:73"><span class="dot" data-om-id="41d47ea5:74"></span>Major</span></div>
+          <div class="scale-def" data-om-id="41d47ea5:75">Important feature broken or behaving incorrectly.</div>
+          <div class="scale-resp" data-om-id="41d47ea5:76"><b data-om-id="41d47ea5:77">Fix this cycle.</b> High priority.</div>
+        </div>
+        <div class="scale-row anim" data-om-id="41d47ea5:78">
+          <div class="scale-name" data-om-id="41d47ea5:79"><span class="sev sev-minor" data-om-id="41d47ea5:80"><span class="dot" data-om-id="41d47ea5:81"></span>Minor</span></div>
+          <div class="scale-def" data-om-id="41d47ea5:82">Noticeable issue with limited impact on the user's task.</div>
+          <div class="scale-resp" data-om-id="41d47ea5:83"><b data-om-id="41d47ea5:84">Schedule soon.</b> Backlog.</div>
+        </div>
+        <div class="scale-row anim" data-om-id="41d47ea5:85">
+          <div class="scale-name" data-om-id="41d47ea5:86"><span class="sev sev-trivial" data-om-id="41d47ea5:87"><span class="dot" data-om-id="41d47ea5:88"></span>Trivial</span></div>
+          <div class="scale-def" data-om-id="41d47ea5:89">Cosmetic or copy issue. No functional impact.</div>
+          <div class="scale-resp" data-om-id="41d47ea5:90"><b data-om-id="41d47ea5:91">Nice to have.</b> Polish.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · CLOSING -->
+  <section data-label="Questions" data-screen-label="04 Questions" data-om-id="41d47ea5:317" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="3" data-deck-last-visible="">
+    <div class="slide closing" data-om-id="41d47ea5:318">
+      <div class="cover-eyebrow anim" data-om-id="41d47ea5:319">Thank you</div>
+      <h1 class="anim" data-om-id="41d47ea5:320">Questions?</h1>
+      <p class="lead anim" data-om-id="41d47ea5:321">Happy to walk through any issue, repro steps, or the recordings in detail.</p>
+      <div class="contact-row" data-om-id="41d47ea5:322">
+        <div class="meta-item" data-om-id="41d47ea5:323">
+          <div class="meta-label" data-om-id="41d47ea5:324">Contact</div>
+          <div class="meta-value" data-om-id="41d47ea5:325">Rafael Rozendo</div>
+        </div>
+        <div class="meta-item" data-om-id="41d47ea5:326">
+          <div class="meta-label" data-om-id="41d47ea5:327">Build tested</div>
+          <div class="meta-value mono" data-om-id="41d47ea5:328">TBD</div>
+        </div>
+        <div class="meta-item" data-om-id="41d47ea5:329">
+          <div class="meta-label" data-om-id="41d47ea5:330">Tracker</div>
+          <div class="meta-value mono" data-om-id="41d47ea5:331">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</deck-stage>
+
+<div id="tweaks-root"></div>
+
+<script src="deck-stage.js"></script>
+<script src="image-slot.js"></script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="deck-tweaks.jsx"></script>
+</body>
+</html>
